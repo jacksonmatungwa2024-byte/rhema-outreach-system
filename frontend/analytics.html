@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Attendance Analytics</title>
+  <link rel="stylesheet" href="analytics.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="header">
+    <h1>📊 Dashboard ya Takwimu za Ibada</h1>
+    <p>Angalia mwenendo wa mahudhurio kwa muda.</p>
+    <button onclick="logout()">🚪 Toka</button>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="attendanceChart"></canvas>
+  </div>
+
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    async function loadAnalytics() {
+      const res = await fetch('/analytics/summary');
+      const data = await res.json();
+
+      const labels = data.map(entry => entry.date);
+      const counts = data.map(entry => entry.total);
+
+      const ctx = document.getElementById('attendanceChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Mahudhurio kwa Siku',
+            data: counts,
+            borderColor: '#1e3c72',
+            backgroundColor: 'rgba(30,60,114,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Idadi ya Watu' }
+            },
+            x: {
+              title: { display: true, text: 'Tarehe' }
+            }
+          }
+        }
+      });
+    }
+
+    loadAnalytics();
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance Summary – Rhema Outreach</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    .actions {
+      text-align: right;
+    }
+    .actions button {
+      padding: 10px 15px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📋 Attendance Summary</h2>
+
+    <div class="actions">
+      <button onclick="printSummary()">🖨️ Print</button>
+      <button onclick="exportCSV()">📁 Export CSV</button>
+    </div>
+
+    <table id="summaryTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Service</th>
+          <th>Method</th>
+          <th>Count</th>
+          <th>Recorded By</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Placeholder data for now
+    const sampleData = [
+      { date: '2025-09-01', service: 'Sunday Worship', method: 'manual', count: 87, recordedBy: 'Usher A' },
+      { date: '2025-09-01', service: 'Youth Service', method: 'scanner', count: 42, recordedBy: 'Usher B' }
+    ];
+
+    const tbody = document.querySelector('#summaryTable tbody');
+    sampleData.forEach(entry => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${entry.date}</td>
+        <td>${entry.service}</td>
+        <td>${entry.method}</td>
+        <td>${entry.count}</td>
+        <td>${entry.recordedBy}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    function printSummary() {
+      window.print();
+    }
+
+    function exportCSV() {
+      alert("CSV export will be wired with backend tomorrow.");
+    }
+  </script>
+</body>
+</html>

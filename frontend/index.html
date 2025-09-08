@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rhema Outreach</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="splash-container">
+    <div class="logo-circle">⛪</div>
+
+    <h1 class="fade-in">Tunaongeza maarifa</h1>
+    <h2 class="fade-in delay-1">Tunakuwa kidigitali</h2>
+    <h3 class="fade-in delay-2">Tunaanza Rhema Church Electronic System</h3>
+
+    <div class="loading-dots">
+      <span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span>
+    </div>
+
+    <div id="datetime" class="fade-in delay-3"></div>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const time = now.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
+      const date = now.toLocaleDateString('sw-TZ', options);
+      document.getElementById('datetime').textContent = `${date} - ${time}`;
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Redirect after 6 seconds
+    setTimeout(() => {
+      window.location.href = 'splash.html'; // your welcome page
+    }, 6000);
+  </script>
+</body>
+</html>

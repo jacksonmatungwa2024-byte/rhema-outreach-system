@@ -1,0 +1,41 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f8ff;
+  color: #2c3e50;
+  padding: 40px;
+}
+
+.profile-box {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.profile-box h1 {
+  color: #1e3c72;
+  margin-bottom: 20px;
+}
+
+#churchDetails h2 {
+  color: #27ae60;
+  margin-bottom: 10px;
+}
+
+#churchDetails p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+button {
+  background: #1e3c72;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}

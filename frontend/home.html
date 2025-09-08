@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rhema Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+    <div class="floating-scripture">“Nuru yako itangaze gizani.” — Isaya 60:1</div>
+  <h2 id="welcomeMessage">Karibu!</h2>
+  <div class="grid">
+    <div class="tab" id="adminTab" onclick="goTo('dashboard.html')">
+      <i class="fas fa-user-shield"></i>
+      Admin Panel
+    </div>
+    <div class="tab" id="usherTab" onclick="goTo('scan.html')">
+      <i class="fas fa-fingerprint"></i>
+      Usher Panel
+    </div>
+    <div class="tab" id="pastorTab" onclick="goTo('pastor.html')">
+      <i class="fas fa-praying-hands"></i>
+      Pastor Panel
+    </div>
+    <div class="tab" id="mediaTab" onclick="goTo('media.html')">
+      <i class="fas fa-video"></i>
+      Media Team
+    </div>
+    <div class="tab" id="financeTab" onclick="goTo('finance.html')">
+      <i class="fas fa-coins"></i>
+      Finance
+    </div>
+  </div>
+  
+  <br>
+  <div class="scripture-banner">
+  “Bwana ni mchungaji wangu, sitapungukiwa na kitu.” — Zaburi 23:1  
+  “Mambo yote yanawezekana kwa yule aaminiye.” — Marko 9:23  
+  “Nanyi mtajua kweli, nayo hiyo kweli itawaweka huru.” — Yohana 8:32
+</div>
+
+  <script>
+    const role = localStorage.getItem('role');
+    const username = localStorage.getItem('username');
+
+    const roleLabel = {
+      admin: 'Admin',
+      usher: 'Mhudumu',
+      pastor: 'Mchungaji',
+      media: 'Media',
+      finance: 'Fedha'
+    };
+
+    document.getElementById('welcomeMessage').textContent =
+      `Karibu ${roleLabel[role] || ''} ${username || ''}`;
+
+    const accessMap = {
+      admin: ['adminTab', 'usherTab', 'pastorTab', 'mediaTab', 'financeTab'],
+      usher: ['usherTab'],
+      pastor: ['pastorTab'],
+      media: ['mediaTab'],
+      finance: ['financeTab']
+    };
+
+    const allowed = accessMap[role] || [];
+    document.querySelectorAll('.tab').forEach(tab => {
+      if (!allowed.includes(tab.id)) {
+        tab.classList.add('disabled');
+        tab.onclick = () => alert('Huna ruhusa ya kufungua sehemu hii.');
+      }
+    });
+
+    function goTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+<body>
+  <div class="nature-background"></div>
+
+  <div class="content">
+   
+    <div class="grid">
+      <!-- Your tab layout here -->
+    </div>
+  </div>
+</body>
+</html>

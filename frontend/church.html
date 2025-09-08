@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Church Profile</title>
+  <link rel="stylesheet" href="church.css" />
+</head>
+<body>
+  <div class="profile-box">
+    <h1>🏛️ Taarifa za Kanisa</h1>
+    <div id="churchDetails">Inapakia...</div>
+    <button onclick="window.location.href='admin.html'">🔙 Rudi kwa Admin</button>
+  </div>
+
+  <script>
+    async function loadChurchDetails() {
+      const res = await fetch('/config/church');
+      const config = await res.json();
+
+      const box = document.getElementById('churchDetails');
+      box.innerHTML = `
+        <h2>${config.name}</h2>
+        <p><strong>Mahali:</strong> ${config.location}</p>
+        <p><strong>Mchungaji Mkuu:</strong> ${config.pastor}</p>
+        <p><strong>Kauli Mbiu:</strong> <em>${config.motto}</em></p>
+        <p><strong>Ratiba ya Ibada:</strong><br>${config.schedule.replace(/\n/g, '<br>')}</p>
+        <p><strong>Imesanidiwa na:</strong> ${config.configuredBy}</p>
+      `;
+    }
+
+    loadChurchDetails();
+  </script>
+</body>
+</html>

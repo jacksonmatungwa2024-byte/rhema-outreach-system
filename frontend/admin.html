@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+  
+  <div class="sidebar">
+    <h2>🔐 Admin</h2>
+    <ul>
+      <button onclick="switchLanguage()">🌐 Badilisha Lugha</button>
+      <li><button onclick="showSection('aiAssistant')">🧠 AI Assistant</button></li>
+      <li><button onclick="showSection('dashboard')">🏠 Dashboard</button></li>
+      <li><button onclick="showSection('accounts')">👥 Create Accounts</button></li>
+      <li><button onclick="showSection('setup')">⚙️ System Setup</button></li>
+      <li><button onclick="showSection('messages')">📨 Messages</button></li>
+      <li><button onclick="showSection('analytics')">📊 Analytics</button></li>
+      <li><button onclick="showSection('items')">📦 Item Configuration</button></li>
+      <li><button onclick="showSection('userConfig')">👤 User Configuration</button></li>
+      <li><button onclick="showSection('mediaGallery')">🖼️ Media Gallery</button></li>
+      <li><button onclick="showSection('logs')">📜 Activity Logs</button></li>
+      <li><button onclick="showSection('systemUsage')">📊 System Usage</button></li>
+      <li><button onclick="logout()">🚪 Logout</button></li>
+      
+    </ul>
+  </div>
+
+  
+  <div class="main-panel">
+
+    <section id="aiAssistant" class="panel-section" style="display:none;">
+  <h2>🧠 Msaidizi wa AI</h2>
+  <div class="tabs">
+    <button onclick="showAITab('systemSummary')">📊 Muhtasari wa Mfumo</button>
+    <button onclick="showAITab('serviceInsights')">📅 Takwimu za Ibada</button>
+    <button onclick="showAITab('userActivity')">👤 Ripoti ya Watumiaji</button>
+    <button onclick="showAITab('spiritualSupport')">🙏 Maombi na Andiko</button>
+  </div>
+
+  <div id="systemSummary" class="ai-tab">Inapakia muhtasari...</div>
+  <div id="serviceInsights" class="ai-tab" style="display:none;">Inapakia takwimu...</div>
+  <div id="userActivity" class="ai-tab" style="display:none;">Inapakia ripoti...</div>
+  <div id="spiritualSupport" class="ai-tab" style="display:none;">Inapakia maombi...</div>
+
+  <div class="tabs">
+  <button onclick="showAITab('systemSummary')">📊 Muhtasari</button>
+  <button onclick="showAITab('serviceInsights')">📅 Ibada</button>
+  <button onclick="showAITab('userActivity')">👤 Watumiaji</button>
+  <button onclick="showAITab('spiritualSupport')">🙏 Maombi</button>
+  <button onclick="showAITab('languageSwitcher')">🌐 Lugha</button>
+  <button onclick="showAITab('pageTranslator')">🈯 Mfasiri wa Ukurasa</button>
+  <button onclick="showAITab('pageTutorial')">📖 Mafunzo ya Mfumo</button>
+</div>
+
+<div id="languageSwitcher" class="ai-tab" style="display:none;">Inapakia lugha...</div>
+<div id="pageTranslator" class="ai-tab" style="display:none;">Inapakia mfasiri...</div>
+<div id="pageTutorial" class="ai-tab" style="display:none;">Inapakia mafunzo...</div>
+
+</section>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="panel-section">
+      <h1>Karibu Admin</h1>
+      <p>“Mwenye hekima hujenga nyumba yake.” — Mithali 14:1</p>
+    </section>
+
+    <!-- Create Accounts -->
+    <section id="accounts" class="panel-section" style="display:none;">
+      <h2>👥 Unda Akaunti Mpya</h2>
+      <input type="text" id="username" placeholder="Jina la mtumiaji" />
+      <input type="text" id="fullName" placeholder="Majina kamili" />
+      <input type="password" id="password" placeholder="Nenosiri" />
+      <select id="role">
+        <option value="usher">Usher</option>
+        <option value="pastor">Pastor</option>
+        <option value="admin">Admin</option>
+        <option value="media">Media</option>
+        <option value="intercessor">Intercessor</option>
+        <option value="finance">Finance</option>
+      </select>
+      <button onclick="createUser()">Unda Akaunti</button>
+
+      <h3>📋 Watumiaji Wote</h3>
+      <ul id="userList">Inapakia...</ul>
+    </section>
+
+    <!-- System Setup -->
+    <section id="setup" class="panel-section" style="display:none;">
+      <h2>⚙️ Sanidi Mfumo</h2>
+      <input type="text" id="serviceName" placeholder="Jina la Ibada (mf. Ibada ya vijana)" />
+      <input type="datetime-local" id="serviceTime" />
+      <textarea id="serviceNote" placeholder="Maelezo ya ziada (hiari)"></textarea>
+      <button onclick="submitSetup()">Tuma Ibada</button>
+    
+<div class="config-form">
+  <h3>🏛️ Church Configuration</h3>
+  <input type="text" id="churchName" placeholder="Jina la Kanisa" />
+  <input type="text" id="churchLocation" placeholder="Mahali (mtaa, mji)" />
+  <input type="text" id="churchMotto" placeholder="Kauli mbiu au andiko kuu" />
+  <input type="text" id="pastorName" placeholder="Mchungaji Mkuu" />
+  <textarea id="serviceSchedule" placeholder="Ratiba ya ibada (mf. Jumapili saa 3:00, Jumatano saa 10:00)"></textarea>
+  <button onclick="submitChurchConfig()">Hifadhi Taarifa</button>
+</div>
+
+
+    </section>
+
+    <!-- Messages -->
+    <section id="messages" class="panel-section" style="display:none;">
+      <h2>📨 Ujumbe kutoka kwa Wahudumu</h2>
+      <ul id="messageList">Inapakia ujumbe...</ul>
+    </section>
+
+    
+    <!-- Analytics -->
+    <section id="analytics" class="panel-section" style="display:none;">
+      <h2>📊 Takwimu za Mfumo</h2>
+      <canvas id="analyticsChart"></canvas>
+    </section>
+  </div>
+
+  <section id="items" class="panel-section" style="display:none;">
+  <h2>📦 Sanidi Vifaa/Vitu vya Kanisa</h2>
+  <input type="text" id="itemName" placeholder="Jina la Kitu (mf. Spika)" />
+  <input type="text" id="itemCategory" placeholder="Aina (mf. Vifaa vya sauti)" />
+  <input type="number" id="itemQuantity" placeholder="Idadi" />
+  <select id="itemStatus">
+    <option value="available">Inapatikana</option>
+    <option value="in use">Inatumika</option>
+    <option value="damaged">Imeharibika</option>
+  </select>
+  <button onclick="submitItem()">Hifadhi Kitu</button>
+
+  <h3>📋 Vitu Vilivyosanidiwa</h3>
+  <ul id="itemList">Inapakia...</ul>
+</section>
+
+<section id="logs" class="panel-section" style="display:none;">
+  <h2>📜 User Activity Logs</h2>
+  <ul id="logList">Inapakia...</ul>
+
+  
+</section>
+
+
+<section id="userConfig" class="panel-section" style="display:none;">
+  <h2>👤 Sanidi Watumiaji</h2>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Majina</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Badilisha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Rows will be injected here -->
+    </tbody>
+  </table>
+
+  <input type="file" id="profilePic" accept="image/*" />
+<button onclick="uploadProfilePic()">Pakia Picha</button>
+
+<img id="userPhoto" src="" alt="Profile" />
+
+<input type="file" id="profilePic" accept="image/*" />
+<button onclick="uploadProfilePic()">Pakia Picha</button>
+<img id="userPhoto" src="" alt="Profile" style="max-width:150px; margin-top:10px;" />
+
+
+<select onchange="updatePermission('neema', 'viewItems', this.value)">
+  <option value="true">Ruhusu</option>
+  <option value="false">Zuia</option>
+</select>
+
+</section>
+
+<section>
+<section id="systemUsage" class="panel-section" style="display:none;">
+  <h2>📊 Taarifa za Mfumo</h2>
+  <ul id="usageStats">
+    <li>Watumiaji: <span id="userCount">...</span></li>
+    <li>Waumini Wamesajiliwa: <span id="memberCount">...</span></li>
+    <li>Ujumbe Ulitumwa: <span id="messageCount">...</span></li>
+    <li>Picha Zilizo kwenye Storage: <span id="mediaCount">...</span></li>
+  </ul>
+</section>
+
+<section id="mediaGallery" class="panel-section" style="display:none;">
+  <h2>🖼️ Picha za Ibada</h2>
+  <div id="galleryGrid">Inapakia picha...</div>
+</section>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "...",
+    appId: "..."
+  };
+  firebase.initializeApp(firebaseConfig);
+  const storage = firebase.storage();
+
+  async function uploadProfilePic() {
+    const file = document.getElementById('profilePic').files[0];
+    const username = localStorage.getItem('username');
+    const ref = storage.ref().child(`profilePics/${username}`);
+    await ref.put(file);
+    const url = await ref.getDownloadURL();
+
+    await fetch('/users/upload-photo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, photoURL: url })
+    });
+
+    document.getElementById('userPhoto').src = url;
+    alert('✅ Picha imehifadhiwa kwenye Firebase Storage');
+  }
+</script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.panel-section').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    async function createUser() {
+      const username = document.getElementById('username').value.trim();
+      const fullName = document.getElementById('fullName').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      const res = await fetch('/users/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, fullName, password, role })
+      });
+
+      const data = await res.json();
+      alert(data.message);
+      loadUsers();
+    }
+
+    async function loadUsers() {
+      const res = await fetch('/users/all');
+      const users = await res.json();
+      const list = document.getElementById('userList');
+      list.innerHTML = '';
+      users.forEach(u => {
+        const item = document.createElement('li');
+        item.textContent = `${u.username} — ${u.role} (${u.fullName})`;
+        list.appendChild(item);
+      });
+    }
+
+    async function submitSetup() {
+      const title = document.getElementById('serviceName').value.trim();
+      const time = document.getElementById('serviceTime').value;
+      const note = document.getElementById('serviceNote').value.trim();
+      const createdBy = localStorage.getItem('username') || 'admin';
+
+      await fetch('/events/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, time, note, createdBy })
+      });
+
+      alert('Ibada imeongezwa na ujumbe umetumwa.');
+    }
+
+    async function loadMessages() {
+      const res = await fetch('/messages/all');
+      const messages = await res.json();
+      const list = document.getElementById('messageList');
+      list.innerHTML = '';
+      messages.forEach(msg => {
+        const item = document.createElement('li');
+        item.textContent = `${msg.message} — ${msg.from} (${msg.time})`;
+        list.appendChild(item);
+      });
+    }
+
+    async function loadAnalyticsChart() {
+      const res = await fetch('/analytics/summary');
+      const data = await res.json();
+      const labels = data.map(d => d.date);
+      const counts = data.map(d => d.total);
+
+      new Chart(document.getElementById('analyticsChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Mahudhurio kwa Siku',
+            data: counts,
+            borderColor: '#27ae60',
+            backgroundColor: 'rgba(39,174,96,0.1)',
+            fill: true
+          }]
+        }
+      });
+    }
+
+    async function submitChurchConfig() {
+  const name = document.getElementById('churchName').value.trim();
+  const location = document.getElementById('churchLocation').value.trim();
+  const motto = document.getElementById('churchMotto').value.trim();
+  const pastor = document.getElementById('pastorName').value.trim();
+  const schedule = document.getElementById('serviceSchedule').value.trim();
+
+  if (!name || !location || !pastor) {
+    alert('Tafadhali jaza jina la kanisa, mahali, na mchungaji.');
+    return;
+  }
+
+  const payload = {
+    name,
+    location,
+    motto,
+    pastor,
+    schedule,
+    configuredBy: localStorage.getItem('username') || 'admin',
+    configuredAt: new Date()
+  };
+
+  await fetch('/config/setup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  alert('✅ Taarifa za kanisa zimehifadhiwa.');
+}
+
+    loadUsers();
+    loadMessages();
+    loadAnalyticsChart();
+
+    async function loadChurchProfile() {
+  const res = await fetch('/config/church');
+  const config = await res.json();
+
+  const banner = document.getElementById('churchBanner');
+  if (banner) {
+    banner.innerHTML = `
+      <h2>${config.name}</h2>
+      <p>${config.location}</p>
+      <p><em>${config.motto}</em></p>
+      <p><strong>Mchungaji:</strong> ${config.pastor}</p>
+    `;
+  }
+}
+
+async function submitItem() {
+  const name = document.getElementById('itemName').value.trim();
+  const category = document.getElementById('itemCategory').value.trim();
+  const quantity = parseInt(document.getElementById('itemQuantity').value);
+  const status = document.getElementById('itemStatus').value;
+  const addedBy = localStorage.getItem('username') || 'admin';
+
+  if (!name || !category || isNaN(quantity)) {
+    alert('Tafadhali jaza jina, aina, na idadi.');
+    return;
+  }
+
+  await fetch('/items/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, category, quantity, status, addedBy })
+  });
+
+  alert('✅ Kitu kimehifadhiwa.');
+  loadItems();
+}
+
+async function loadItems() {
+  const res = await fetch('/items/all');
+  const items = await res.json();
+  const list = document.getElementById('itemList');
+  list.innerHTML = '';
+
+  items.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.name} — ${item.category} (${item.quantity}) [${item.status}]`;
+    list.appendChild(li);
+  });
+}
+async function loadUserConfig() {
+  const res = await fetch('/users/all');
+  const users = await res.json();
+  const tbody = document.querySelector('#userTable tbody');
+  tbody.innerHTML = '';
+
+  users.forEach(user => {
+    const row = document.createElement('tr');
+
+    row.innerHTML = `
+      <td>${user.username}</td>
+      <td>${user.fullName}</td>
+      <td>
+        <select onchange="updateUserRole('${user.username}', this.value)">
+          <option value="usher" ${user.role === 'usher' ? 'selected' : ''}>Usher</option>
+          <option value="pastor" ${user.role === 'pastor' ? 'selected' : ''}>Pastor</option>
+          <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+          <option value="media" ${user.role === 'media' ? 'selected' : ''}>Media</option>
+          <option value="intercessor" ${user.role === 'intercessor' ? 'selected' : ''}>Intercessor</option>
+          <option value="finance" ${user.role === 'finance' ? 'selected' : ''}>Finance</option>
+        </select>
+      </td>
+      <td>
+        <select onchange="updateUserStatus('${user.username}', this.value)">
+          <option value="active" ${user.status === 'active' ? 'selected' : ''}>Active</option>
+          <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+        </select>
+      </td>
+      <td><button onclick="resetUser('${user.username}')">🔁 Reset</button></td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+async function updateUserRole(username, role) {
+  await fetch('/users/update-role', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, role })
+  });
+  alert(`Role ya ${username} imebadilishwa kuwa ${role}`);
+}
+
+async function updateUserStatus(username, status) {
+  await fetch('/users/update-status', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, status })
+  });
+  alert(`Status ya ${username} imewekwa kuwa ${status}`);
+}
+
+async function resetUser(username) {
+  const confirmReset = confirm(`Unataka kuweka upya nenosiri la ${username}?`);
+  if (!confirmReset) return;
+
+  await fetch('/users/reset-password', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username })
+  });
+
+  alert(`✅ Nenosiri la ${username} limewekwa upya (default: rhema123)`);
+}
+
+async function loadLogs() {
+  const res = await fetch('/logs/all');
+  const logs = await res.json();
+  const list = document.getElementById('logList');
+  list.innerHTML = '';
+
+  logs.forEach(log => {
+    const item = document.createElement('li');
+    item.textContent = `${log.username} (${log.role}) — ${log.action} [${log.context}] at ${new Date(log.timestamp.toDate()).toLocaleString('sw-TZ')}`;
+    list.appendChild(item);
+  });
+
+}
+
+async function loadUserPhoto(username) {
+  const res = await fetch(`/users/photo/${username}`);
+  const { photoURL } = await res.json();
+  document.getElementById('userPhoto').src = photoURL || 'default.jpg';
+}
+
+async function loadSystemUsage() {
+  const res = await fetch('/system/usage');
+  const stats = await res.json();
+  document.getElementById('userCount').textContent = stats.userCount;
+  document.getElementById('memberCount').textContent = stats.memberCount;
+  document.getElementById('messageCount').textContent = stats.messageCount;
+  document.getElementById('mediaCount').textContent = stats.mediaCount;
+}
+
+async function loadMediaGallery() {
+  const res = await fetch('/media/all');
+  const mediaItems = await res.json();
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+
+  mediaItems.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'media-card';
+    card.innerHTML = `
+      <img src="${item.photoURL}" alt="${item.caption}" />
+      <p><strong>${item.event}</strong></p>
+      <p>${item.caption}</p>
+      <p><em>${item.uploadedBy}</em></p>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function showAITab(tabId) {
+  document.querySelectorAll('.ai-tab').forEach(t => t.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+}
+
+async function loadAISummaries() {
+  const sysRes = await fetch('/ai/system-summary');
+  const sysText = await sysRes.text();
+  document.getElementById('systemSummary').innerHTML = sysText;
+
+  const svcRes = await fetch('/ai/service-insights');
+  const svcText = await svcRes.text();
+  document.getElementById('serviceInsights').innerHTML = svcText;
+
+  const actRes = await fetch('/ai/user-activity');
+  const actText = await actRes.text();
+  document.getElementById('userActivity').innerHTML = actText;
+
+  const prayRes = await fetch('/ai/spiritual-support');
+  const prayText = await prayRes.text();
+  document.getElementById('spiritualSupport').innerHTML = prayText;
+}
+
+async function loadAIUtilities() {
+  const langRes = await fetch('/ai/language-switcher');
+  document.getElementById('languageSwitcher').innerHTML = await langRes.text();
+
+  const transRes = await fetch('/ai/page-translator');
+  document.getElementById('pageTranslator').innerHTML = await transRes.text();
+
+  const tutRes = await fetch('/ai/page-tutorial');
+  document.getElementById('pageTutorial').innerHTML = await tutRes.text();
+}
+
+if (user.role === 'admin' || user.role === 'pastor') {
+  showSection('aiAssistant');
+}
+
+if (user.role === 'pastor') {
+  loadAISummary('serviceInsights');
+}
+
+const lang = localStorage.getItem('lang') || 'sw'; // default to Swahili
+
+function switchLanguage() {
+  const newLang = lang === 'sw' ? 'en' : 'sw';
+  localStorage.setItem('lang', newLang);
+  location.reload();
+}
+
+async function loadTutorial(role) {
+  const res = await fetch(`/tutorial/${role}`);
+  const html = await res.text();
+  document.getElementById('pageTutorial').innerHTML = html;
+}
+
+if (user.role !== 'admin') {
+  document.getElementById('adminConfigSection').style.display = 'none';
+}
+
+if (req.user.role !== 'admin') {
+  return res.status(403).json({ error: 'Access denied' });
+}
+
+
+async function loadUserPermissions() {
+  const username = localStorage.getItem('username');
+  const res = await fetch(`/users/permissions/${username}`);
+  const perms = await res.json();
+
+  if (!perms.viewItems) document.getElementById('itemConfigSection').style.display = 'none';
+  if (!perms.viewAI) document.getElementById('aiAssistant').style.display = 'none';
+  if (!perms.viewUsage) document.getElementById('systemUsage').style.display = 'none';
+}
+
+async function updatePermission(username, key, value) {
+  await fetch('/users/update-permission', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, key, value: value === 'true' })
+  });
+}
+
+loadTutorial(user.role);
+    loadChurchProfile();
+    loadItems();
+    loadUserConfig();
+    loadLogs();
+    loadUserPhoto(localStorage.getItem('username') || 'admin');
+    loadSystemUsage();
+    loadMediaGallery();
+    loadAISummaries();
+    loadAIUtilities();
+    loadUsers();
+
+  </script>
+</body>
+</html>

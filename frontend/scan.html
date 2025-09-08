@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Usher Panel</title>
+  <link rel="stylesheet" href="usher.css" />
+</head>
+<body>
+
+  <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
+  <div class="sidebar">
+    <h2>🧑🏾‍🤝‍🧑🏾 Mhudumu</h2>
+    <ul>
+      <li><button onclick="openScanForm()">📷 Scan Member</button></li>
+      <li><button onclick="openManualForm()">✍️ Ingiza Kwa Mkono</button></li>
+      <li><button onclick="viewSummary()">📊 Attendance Summary</button></li>
+      <li><button onclick="lookupMember()">🔍 Member Lookup</button></li>
+      <li><button onclick="switchService()">🕒 Service Info</button></li>
+      <li><button onclick="sendAlert()">📨 Notify Admin</button></li>
+      <li><button onclick="exportData()">🧾 Export Attendance</button></li>
+    </ul>
+  </div>
+
+  <div class="main-panel">
+    <div class="user-profile">
+      <p><strong>Mtumiaji:</strong> <span id="usernameDisplay"></span> (<span id="roleDisplay"></span>)</p>
+      <button onclick="logoutUser()">🚪 Toka</button>
+    </div>
+
+    <h1>Karibu Mhudumu</h1>
+    <p id="serviceInfo">Ibada ya Asubuhi - Jumapili</p>
+
+    <div class="counter-box">
+      <h3>📊 Takwimu za Leo</h3>
+      <p>Mtu Mzima: <span id="adultCount">0</span></p>
+      <p>Mtoto: <span id="childCount">0</span></p>
+    </div>
+
+    <div class="roster-panel">
+      <h3>🧑🏾‍🤝‍🧑🏾 Waliopangwa Leo</h3>
+      <ul id="rosterList">
+        <li>Inapakia...</li>
+      </ul>
+    </div>
+
+    <div class="notify-panel">
+      <h3>📨 Tuma Ujumbe kwa Admin</h3>
+      <textarea id="adminMessage" placeholder="Andika ujumbe hapa..."></textarea>
+      <button onclick="sendAdminMessage()">Tuma Ujumbe</button>
+    </div>
+
+    <div class="message-history">
+      <h3>📋 Ujumbe Ulio Tuma</h3>
+      <ul id="messageList">
+        <li>Hakuna ujumbe bado.</li>
+      </ul>
+    </div>
+
+    <div id="scriptureBanner">“Karibu nyumbani kwa Bwana.” — Zaburi 122:1</div>
+  </div>
+
+  <!-- Manual Registration Form -->
+  <div id="manualForm" class="form-popup" style="display:none;">
+    <h3>✍️ Sajili Mshiriki kwa Mkono</h3>
+    <label>Aina ya Mshiriki:</label>
+    <select id="manualType">
+      <option value="mtu mzima">Mtu Mzima</option>
+      <option value="mtoto">Mtoto</option>
+    </select>
+    <label>Jinsia:</label>
+    <select id="manualGender">
+      <option value="me">Me</option>
+      <option value="ke">Ke</option>
+    </select>
+    <label>Idadi:</label>
+    <input type="number" id="manualCount" value="1" min="1" />
+    <label>Majina:</label>
+    <input type="text" id="manualNames" placeholder="Majina Kamili (hiari)" />
+    <label>Mahali Anapotokea:</label>
+    <input type="text" id="manualLocation" placeholder="Mahali (hiari)" />
+    <label>Namba ya Simu:</label>
+    <input type="text" id="manualPhone" placeholder="Simu (hiari)" />
+    <button onclick="submitManual()">Sajili</button>
+    <button onclick="closeManualForm()">Funga</button>
+  </div>
+
+    <div id="churchBanner">Inapakia taarifa za kanisa...</div>
+  <!-- Scanner Registration Form -->
+  <div id="scanForm" class="form-popup" style="display:none;">
+    <h3>📷 Sajili Kupitia Scanner</h3>
+    <label>Aina ya Mshiriki:</label>
+    <select id="scanType">
+      <option value="mtu mzima">Mtu Mzima</option>
+      <option value="mtoto">Mtoto</option>
+    </select>
+    <label>Jinsia:</label>
+    <select id="scanGender">
+      <option value="me">Me</option>
+      <option value="ke">Ke</option>
+    </select>
+    <button onclick="confirmScan()">Scan</button>
+    <button onclick="closeScanForm()">Funga</button>
+  </div>
+
+  <script>
+    let adultCount = 0;
+    let childCount = 0;
+
+    const username = localStorage.getItem('username') || 'Anonymous';
+    const role = localStorage.getItem('role') || 'usher';
+    document.getElementById('usernameDisplay').textContent = username;
+    document.getElementById('roleDisplay').textContent = role;
+
+    function toggleSidebar() {
+      document.querySelector('.sidebar').classList.toggle('active');
+    }
+
+    function updateCounters() {
+      document.getElementById('adultCount').textContent = adultCount;
+      document.getElementById('childCount').textContent = childCount;
+    }
+
+    function openManualForm() {
+      document.getElementById('manualForm').style.display = 'block';
+    }
+
+    function closeManualForm() {
+      document.getElementById('manualForm').style.display = 'none';
+    }
+
+    async function submitManual() {
+  const type = document.getElementById('manualType').value;
+  const gender = document.getElementById('manualGender').value;
+  const count = parseInt(document.getElementById('manualCount').value);
+  const names = document.getElementById('manualNames').value.trim();
+  const location = document.getElementById('manualLocation').value.trim();
+  const phone = document.getElementById('manualPhone').value.trim();
+  const usher = localStorage.getItem('username');
+
+  for (let i = 0; i < count; i++) {
+    await fetch('/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type, gender, names, location, phone, usher, method: 'manual'
+      })
+    });
+  }
+
+  alert(`${count} mshiriki amesajiliwa kwa mkono`);
+  closeManualForm();
+  adultCount += type === 'mtu mzima' ? count : 0;
+  childCount += type === 'mtoto' ? count : 0;
+  updateCounters();
+}
+
+    function openScanForm() {
+      document.getElementById('scanForm').style.display = 'block';
+    }
+
+    function closeScanForm() {
+      document.getElementById('scanForm').style.display = 'none';
+    }
+
+    async function confirmScan() {
+  const type = document.getElementById('scanType').value;
+  const gender = document.getElementById('scanGender').value;
+  const usher = localStorage.getItem('username');
+
+  const scannerAccepted = confirm('Scanner imekubali alama ya kidole?');
+  if (!scannerAccepted) {
+    alert('Scan haijafanikiwa.');
+    return;
+  }
+
+  await fetch('/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type, gender, names: '', location: '', phone: '', usher, method: 'scanner'
+    })
+  });
+
+  alert('Mshiriki amesajiliwa kwa scanner.');
+  adultCount += type === 'mtu mzima' ? 1 : 0;
+  childCount += type === 'mtoto' ? 1 : 0;
+  updateCounters();
+  closeScanForm();
+}
+
+    function viewSummary() {
+      alert(`Waliokuja leo:\nMtu Mzima: ${adultCount}\nMtoto: ${childCount}`);
+    }
+
+    function lookupMember() {
+      const name = prompt('Ingiza jina la mshiriki:');
+      alert('Hakuna data halisi bado, lakini utaona taarifa za ' + name);
+    }
+
+    function switchService() {
+      const service = prompt('Andika aina ya ibada (e.g. Midweek, Jumapili):');
+      document.getElementById('serviceInfo').textContent = service;
+    }
+
+    function sendAlert() {
+      alert('Ujumbe umetumwa kwa admin: “Tuna mgeni maalum.”');
+    }
+
+    function exportData() {
+      alert('Data ya waliokuja imeandaliwa kwa kuchapishwa.');
+    }
+
+    function logoutUser() {
+      localStorage.clear
+
+            if (!message) {
+        alert('Tafadhali andika ujumbe.');
+        return;
+      }
+
+      const timestamp = new Date().toLocaleString('sw-TZ');
+      const fullMessage = {
+        from: username,
+        role,
+        message,
+        time: timestamp,
+        read: false
+      };
+
+      // Simulate saving to localStorage
+      const messages = JSON.parse(localStorage.getItem('adminMessages') || '[]');
+      messages.push(fullMessage);
+      localStorage.setItem('adminMessages', JSON.stringify(messages));
+
+      alert('Ujumbe umetumwa kwa admin.');
+      document.getElementById('adminMessage').value = '';
+      loadMessageHistory();
+    }
+
+    function loadMessageHistory() {
+      const list = document.getElementById('messageList');
+      const messages = JSON.parse(localStorage.getItem('adminMessages') || '[]');
+      list.innerHTML = '';
+
+      if (messages.length === 0) {
+        list.innerHTML = '<li>Hakuna ujumbe bado.</li>';
+        return;
+      }
+
+      messages.forEach((msg) => {
+        const status = msg.read ? '✅ Imesomwa' : '📬 Haijasomwa';
+        const item = document.createElement('li');
+        item.textContent = `${status} - ${msg.message} (${msg.time})`;
+        list.appendChild(item);
+      });
+    }
+
+    function loadRoster() {
+      const list = document.getElementById('rosterList');
+      list.innerHTML = '';
+
+      const sampleRoster = [
+        { name: 'Neema John', role: 'Greeter', time: '07:30', checkedIn: true },
+        { name: 'Elia Peter', role: 'Scanner', time: '07:45', checkedIn: false }
+      ];
+
+      sampleRoster.forEach(person => {
+        const status = person.checkedIn ? '✅' : '⏳';
+        const item = document.createElement('li');
+        item.textContent = `${status} ${person.name} - ${person.role} (${person.time})`;
+        list.appendChild(item);
+      });
+    }
+
+    // Initial load
+    loadMessageHistory();
+    loadRoster();
+
+    async function loadChurchProfile() {
+  const res = await fetch('/config/church');
+  const config = await res.json();
+
+  const banner = document.getElementById('churchBanner');
+  if (banner) {
+    banner.innerHTML = `
+      <h2>${config.name}</h2>
+      <p>${config.location}</p>
+      <p><em>${config.motto}</em></p>
+      <p><strong>Mchungaji:</strong> ${config.pastor}</p>
+    `;
+  }
+  const lang = localStorage.getItem('lang') || 'sw'; // default to Swahili
+
+function switchLanguage() {
+  const newLang = lang === 'sw' ? 'en' : 'sw';
+  localStorage.setItem('lang', newLang);
+  location.reload();
+}
+
+}
+  </script>
+</body>
+</html>
+

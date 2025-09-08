@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard – Rhema Attendance</title>
+  <link rel="stylesheet" href="register.css" />
+  <style>
+    .dashboard {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    .summary, .audit, .config {
+      margin-top: 30px;
+      text-align: left;
+    }
+    .audit-log {
+      font-size: 14px;
+      margin-top: 10px;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    .config label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    .config input, .config select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .config button {
+      margin-top: 15px;
+      padding: 10px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>📊 Admin Dashboard</h2>
+
+    <div class="summary">
+      <h3>Today's Attendance</h3>
+      <p>🧑🏾‍🤝‍🧑🏾 Adults: <span id="adultCount">–</span></p>
+      <p>🧒🏾 Children: <span id="childCount">–</span></p>
+    </div>
+
+    <div class="audit">
+      <h3>Recent Audit Logs</h3>
+      <div id="auditLogs"></div>
+    </div>
+
+    <div class="config">
+      <h3>System Configuration</h3>
+      <form id="configForm">
+        <label>Current Service Type:</label>
+        <select name="currentServiceType">
+          <option value="ibada1">Ibada 1</option>
+          <option value="ibada2">Ibada 2</option>
+          <option value="alhamisi">Alhamisi</option>
+        </select>
+
+        <label>Enable SMS Alerts:</label>
+        <select name="enableSmsAlerts">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+
+        <label>Enable WhatsApp Alerts:</label>
+        <select name="enableWhatsappAlerts">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+
+        <label>Show Countdown:</label>
+        <select name="showCountdown">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+
+        <button type="submit">Update Config</button>
+      </form>
+    </div>
+
+    <a href="index.html" style="display:block; margin-top:30px;">← Back to Home</a>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+
+    // Fetch attendance summary
+    fetch('/admin/summary', {
+      headers: { Authorization: 'Bearer ' + token }
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('adultCount').textContent = data.summary.adultCount;
+      document.getElementById('childCount').textContent = data.summary.childCount;
+    });
+
+    // Fetch audit logs
+    fetch('/admin/audit', {
+      headers: { Authorization: 'Bearer ' + token }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('auditLogs');
+      data.logs.forEach(log => {
+        const div = document.createElement('div');
+        div.className = 'audit-log';
+        div.textContent = `${log.timestamp.toDate().toLocaleString()} – ${log.actor} (${log.role}): ${log.action} → ${log.details}`;
+        container.appendChild(div);
+      });
+    });
+
+    // Submit config update
+    document.getElementById('configForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+
+      const config = {
+        currentServiceType: form.currentServiceType.value,
+        enableSmsAlerts: form.enableSmsAlerts.value === 'true',
+        enableWhatsappAlerts: form.enableWhatsappAlerts.value === 'true',
+        showCountdown: form.showCountdown.value === 'true'
+      };
+
+      const res = await fetch('/config/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(config)
+      });
+
+      const result = await res.json();
+      alert(result.message);
+    });
+  </script>
+</body>
+</html>

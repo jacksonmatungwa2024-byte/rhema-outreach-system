@@ -1,0 +1,294 @@
+/* ====== BASE LAYOUT ====== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  background: linear-gradient(to bottom right, #eaf6ff, #dbeaf3);
+  color: #2c3e50;
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  width: 240px;
+  background: #1e3c72;
+  color: white;
+  padding: 25px;
+  height: 100vh;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  position: relative;
+  transition: left 0.3s ease;
+}
+
+.sidebar h2 {
+  font-size: 22px;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 12px;
+  background: #ffffff;
+  color: #1e3c72;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.sidebar button:hover {
+  background: #2980b9;
+  color: white;
+}
+
+/* ====== MOBILE MENU TOGGLE ====== */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background: #1e3c72;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ====== MAIN PANEL ====== */
+.main-panel {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.main-panel h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+#serviceInfo {
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: #34495e;
+}
+
+/* ====== USER PROFILE ====== */
+.user-profile {
+  text-align: right;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.user-profile button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ====== COUNTERS ====== */
+.counter-box {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  max-width: 400px;
+  margin: 0 auto 40px auto;
+}
+
+.counter-box h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+.counter-box p {
+  font-size: 17px;
+  margin: 8px 0;
+  color: #27ae60;
+}
+
+/* ====== DUTY ROSTER ====== */
+.roster-panel {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  max-width: 500px;
+  margin: 0 auto 40px auto;
+}
+
+.roster-panel h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+#rosterList li {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+/* ====== SCRIPTURE BANNER ====== */
+#scriptureBanner {
+  font-size: 16px;
+  font-style: italic;
+  color: #7f8c8d;
+  margin-top: 40px;
+  animation: fadeScripture 6s ease-in-out infinite alternate;
+}
+
+@keyframes fadeScripture {
+  0% { opacity: 0.5; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
+
+/* ====== ADMIN MESSAGING ====== */
+.notify-panel,
+.message-history {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  max-width: 500px;
+  margin: 0 auto 40px auto;
+}
+
+.notify-panel h3,
+.message-history h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.notify-panel textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: none;
+  margin-bottom: 10px;
+}
+
+.notify-panel button {
+  background: #1e3c72;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#messageList li {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #34495e;
+}
+
+/* ====== POPUP FORMS ====== */
+.form-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+  text-align: left;
+}
+
+.form-popup h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #1e3c72;
+}
+
+.form-popup label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+  color: #34495e;
+}
+
+.form-popup input,
+.form-popup select,
+.form-popup textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.form-popup button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #1e3c72;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+.form-popup button:hover {
+  background: #2980b9;
+}
+
+/* ====== RESPONSIVE DESIGN ====== */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -240px;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-panel {
+    padding: 20px;
+  }
+
+  .form-popup {
+    width: 95%;
+  }
+}

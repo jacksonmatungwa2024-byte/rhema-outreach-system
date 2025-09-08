@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pastor Panel</title>
+  <link rel="stylesheet" href="pastor.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>🧑🏾‍💼 Mchungaji</h2>
+    <ul>
+      <li><button onclick="showSection('dashboard')">🏠 Dashboard</button></li>
+      <li><button onclick="showSection('events')">📅 Church Events</button></li>
+      <li><button onclick="showSection('messages')">📨 Messages</button></li>
+      <li><button onclick="showSection('analytics')">📊 Analytics</button></li>
+      <li><button onclick="logout()">🚪 Logout</button></li>
+    </ul>
+  </div>
+
+  <div class="main-panel">
+    <!-- Dashboard -->
+    <section id="dashboard" class="panel-section">
+      <h1>Karibu Mchungaji</h1>
+      <p>“Nitasimama katika lango la nyumba ya Bwana.” — Zaburi 118:20</p>
+    </section>
+
+    <!-- Church Events -->
+    <section id="events" class="panel-section" style="display:none;">
+      <h2>📅 Church Events</h2>
+      <div class="tabs">
+        <button onclick="showTab('media')">🖼️ Media</button>
+        <button onclick="showTab('attendance')">🧑🏾‍🤝‍🧑🏾 Attendance View</button>
+      </div>
+
+      <div class="event-form">
+  <h3>➕ Ongeza Ibada Mpya</h3>
+  <input type="text" id="eventTitle" placeholder="Jina la Ibada (mf. Ibada ya vijana)" />
+  <input type="datetime-local" id="eventTime" />
+  <textarea id="eventNote" placeholder="Maelezo ya ziada (hiari)"></textarea>
+  <button onclick="submitEvent()">Tuma Ibada</button>
+</div>
+
+
+      <div id="media" class="tab-content">
+        <h3>🖼️ Service Pictures</h3>
+        <div id="mediaGallery">Inapakia picha...</div>
+      </div>
+
+      <div id="attendance" class="tab-content" style="display:none;">
+        <h3>🧑🏾‍🤝‍🧑🏾 Registered Waumini</h3>
+        <ul id="memberList">Inapakia...</ul>
+        <canvas id="attendanceChart"></canvas>
+      </div>
+    </section>
+
+    <div id="churchBanner">Inapakia taarifa za kanisa...</div>
+    <!-- Messages -->
+    <section id="messages" class="panel-section" style="display:none;">
+      <h2>📨 Ujumbe kutoka kwa Wahudumu</h2>
+      <ul id="messageList">Inapakia ujumbe...</ul>
+    </section>
+
+    <!-- Analytics -->
+    <section id="analytics" class="panel-section" style="display:none;">
+      <h2>📊 Takwimu za Mahudhurio</h2>
+      <canvas id="analyticsChart"></canvas>
+    </section>
+  </div>
+
+  <script>
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'login.html';
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.panel-section').forEach(s => s.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+    }
+
+    async function loadMembers() {
+      const res = await fetch('/members/all');
+      const members = await res.json();
+      const list = document.getElementById('memberList');
+      list.innerHTML = '';
+
+      members.forEach(m => {
+        const item = document.createElement('li');
+        item.textContent = `${m.names || 'Anonymous'} - ${m.type} (${m.gender}) kutoka ${m.location || 'Mahali haijajazwa'}`;
+        list.appendChild(item);
+      });
+
+      const dailyTotals = {};
+      members.forEach(m => {
+        const date = new Date(m.registeredAt.toDate()).toISOString().split('T')[0];
+        dailyTotals[date] = (dailyTotals[date] || 0) + 1;
+      });
+
+      const labels = Object.keys(dailyTotals).sort();
+      const data = labels.map(d => dailyTotals[d]);
+
+      new Chart(document.getElementById('attendanceChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Mahudhurio kwa Siku',
+            data,
+            borderColor: '#1e3c72',
+            backgroundColor: 'rgba(30,60,114,0.1)',
+            fill: true
+          }]
+        }
+      });
+    }
+
+    async function loadMessages() {
+      const res = await fetch('/messages/all');
+      const messages = await res.json();
+      const list = document.getElementById('messageList');
+      list.innerHTML = '';
+
+      messages.forEach(msg => {
+        const status = msg.read ? '✅' : '📬';
+        const item = document.createElement('li');
+        item.textContent = `${status} ${msg.message} — ${msg.from} (${msg.time})`;
+        list.appendChild(item);
+      });
+    }
+
+    async function loadAnalyticsChart() {
+      const res = await fetch('/analytics/summary');
+      const data = await res.json();
+      const labels = data.map(d => d.date);
+      const counts = data.map(d => d.total);
+
+      new Chart(document.getElementById('analyticsChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Mahudhurio kwa Siku',
+            data: counts,
+            borderColor: '#27ae60',
+            backgroundColor: 'rgba(39,174,96,0.1)',
+            fill: true
+          }]
+        }
+      });
+    }
+
+    async function submitEvent() {
+  const title = document.getElementById('eventTitle').value.trim();
+  const time = document.getElementById('eventTime').value;
+  const note = document.getElementById('eventNote').value.trim();
+  const pastor = localStorage.getItem('username') || 'Anonymous';
+
+  if (!title || !time) {
+    alert('Tafadhali jaza jina la ibada na muda.');
+    return;
+  }
+
+  const payload = {
+    title,
+    time,
+    note,
+    createdBy: pastor
+  };
+
+  await fetch('/events/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  alert('Ibada imeongezwa na ujumbe umetumwa.');
+  document.getElementById('eventTitle').value = '';
+  document.getElementById('eventTime').value = '';
+  document.getElementById('eventNote').value = '';
+}
+
+
+    // Initial loads
+    loadMembers();
+    loadMessages();
+    loadAnalyticsChart();
+
+    async function loadChurchProfile() {
+  const res = await fetch('/config/church');
+  const config = await res.json();
+
+  const banner = document.getElementById('churchBanner');
+  if (banner) {
+    banner.innerHTML = `
+      <h2>${config.name}</h2>
+      <p>${config.location}</p>
+      <p><em>${config.motto}</em></p>
+      <p><strong>Mchungaji:</strong> ${config.pastor}</p>
+    `;
+  }
+}
+
+const lang = localStorage.getItem('lang') || 'sw'; // default to Swahili
+
+function switchLanguage() {
+  const newLang = lang === 'sw' ? 'en' : 'sw';
+  localStorage.setItem('lang', newLang);
+  location.reload();
+}
+
+await fetch('/users/update-permission', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: 'pastor_john',
+    key: 'viewAI',
+    value: true
+  })
+});
+
+  </script>
+</body>
+</html>
