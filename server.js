@@ -3,7 +3,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import fs from 'fs';
+console.log('Render sees:', fs.readdirSync('./routes'));
 // 🛠️ Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
