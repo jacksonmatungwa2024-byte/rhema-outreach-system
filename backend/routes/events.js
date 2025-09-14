@@ -1,10 +1,16 @@
-// routes/events.js
+// 🛡️ RCEMS Ibada Route
+// 🇹🇿 Hii route inaunda ibada mpya na kutuma ujumbe kwa wachungaji na wasimamizi.
+// Kila ibada ni agizo la kiroho. Kila ujumbe ni mwito wa huduma.
+
 import express from 'express';
 import db from '../firebase.js';
-import { verifyAuthToken } from './auth.js';
+
+// 🔐 Auth middleware (adjust if exported as default)
+import { verifyAuthToken } from './auth.js'; // or: import verifyAuthToken from './auth.js';
 
 const router = express.Router();
 
+// 📅 Create Event
 router.post('/events/create', async (req, res) => {
   try {
     const { title, time, note, createdBy } = req.body;
@@ -19,7 +25,7 @@ router.post('/events/create', async (req, res) => {
 
     await db.collection('events').add(event);
 
-    // Auto-message to ushers/admins
+    // 📣 Auto-message to ushers/admins
     await db.collection('messages').add({
       from: createdBy,
       role: 'pastor',
@@ -28,15 +34,16 @@ router.post('/events/create', async (req, res) => {
       read: false
     });
 
-    res.json({ message: '✅ Event created and message sent.' });
+    res.json({ message: '✅ Ibada imeundwa na ujumbe umetumwa.' });
   } catch (err) {
-    console.error('Error creating event:', err);
+    console.error('🚨 Error creating event:', err);
     res.status(500).json({ error: 'Tatizo kwenye kuunda ibada.' });
   }
 });
 
+// 🔐 Protected Endpoint Example
 router.get('/secure-endpoint', verifyAuthToken, async (req, res) => {
-  // protected logic
+  res.json({ message: '✅ Umefikia sehemu salama ya huduma.' });
 });
 
 export default router;
