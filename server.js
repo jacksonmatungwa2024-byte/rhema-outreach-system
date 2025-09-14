@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 
 
 // 🔗 Import Routes (with .js extensions)
-import eventRoutes from './routes/events.js';
+import eventRoutes from '/routes/events.js';
 import setupRoutes from './routes/setup.js';
 import configRoutes from './routes/config.js';
 import userRoutes from './routes/users.js';
